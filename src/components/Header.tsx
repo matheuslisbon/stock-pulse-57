@@ -1,4 +1,4 @@
-import { Package, BarChart3, AlertTriangle, Settings } from "lucide-react";
+import { Package, BarChart3, MessageCircle, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AddProductDialog } from "./AddProductDialog";
@@ -43,6 +43,17 @@ const Header = () => {
           >
             <Package className="h-4 w-4" />
             Analytics & IA
+          </Button>
+          <Button
+            variant={location.pathname === "/chatbot" ? "default" : "ghost"}
+            className={location.pathname === "/chatbot" 
+              ? "gap-2 bg-brand-secondary text-brand-primary-dark hover:bg-brand-secondary-light" 
+              : "gap-2 text-white hover:bg-white/10 hover:text-white"
+            }
+            onClick={() => navigate("/chatbot")}
+          >
+            <MessageCircle className="h-4 w-4" />
+            Canarinho
           </Button>
         </nav>
 
