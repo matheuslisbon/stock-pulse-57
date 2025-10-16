@@ -1,4 +1,4 @@
-import { Package, BarChart3, MessageCircle, Settings } from "lucide-react";
+import { Package, BarChart3, MessageCircle, Settings, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AddProductDialog } from "./AddProductDialog";
@@ -32,6 +32,17 @@ const Header = () => {
           >
             <BarChart3 className="h-4 w-4" />
             Dashboard
+          </Button>
+          <Button
+            variant={location.pathname === "/planning" ? "default" : "ghost"}
+            className={location.pathname === "/planning" 
+              ? "gap-2 bg-brand-secondary text-brand-primary-dark hover:bg-brand-secondary-light" 
+              : "gap-2 text-white hover:bg-white/10 hover:text-white"
+            }
+            onClick={() => navigate("/planning")}
+          >
+            <Store className="h-4 w-4" />
+            Planejamento
           </Button>
           <Button
             variant={location.pathname === "/analytics" ? "default" : "ghost"}
