@@ -1,5 +1,6 @@
 import { Package, BarChart3, AlertTriangle, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AddProductDialog } from "./AddProductDialog";
 
 const Header = () => {
   return (
@@ -34,9 +35,13 @@ const Header = () => {
           <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hover:text-white">
             <Settings className="h-5 w-5" />
           </Button>
-          <Button size="sm" className="hidden sm:flex bg-white text-brand-primary hover:bg-white/90">
-            Adicionar Produto
-          </Button>
+          <AddProductDialog
+            trigger={
+              <Button size="sm" className="hidden sm:flex bg-white text-brand-primary hover:bg-white/90">
+                Adicionar Produto
+              </Button>
+            }
+          />
         </div>
       </div>
     </header>
