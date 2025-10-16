@@ -20,6 +20,11 @@ const Chatbot = () => {
       content: "Olá! Sou o Canarinho, seu assistente de inventário. Como posso ajudar você hoje?",
       timestamp: new Date(),
     },
+    {
+      role: "assistant",
+      content: "📊 **Análise Rápida do Estoque:**\n\n• Parafuso M8 está em nível crítico (12 unidades)\n• Consumo médio: 45 unidades/semana\n• Tendência: +15% de aumento nas últimas 4 semanas\n\n🎯 **Recomendação Urgente:**\nSugiro reabastecer Parafuso M8 com pedido de 200 unidades. Com base no histórico, você ficará sem estoque em aproximadamente 2 dias se não agir agora!\n\n💡 Posso fazer a análise de algum produto específico ou deseja ver mais recomendações?",
+      timestamp: new Date(),
+    },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);

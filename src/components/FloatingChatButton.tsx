@@ -18,6 +18,10 @@ const FloatingChatButton = () => {
       role: "assistant",
       content: "Oi! Sou o Canarinho. Como posso ajudar?",
     },
+    {
+      role: "assistant",
+      content: "⚠️ Alerta: Parafuso M8 em nível crítico! Sugiro pedido urgente de 200 unidades. Quer ver a análise completa?",
+    },
   ]);
   const [input, setInput] = useState("");
   const navigate = useNavigate();
