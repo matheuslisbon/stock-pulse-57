@@ -20,7 +20,7 @@ const FloatingChatButton = () => {
     },
     {
       role: "assistant",
-      content: "⚠️ Alerta: Parafuso M8 em nível crítico! Sugiro pedido urgente de 200 unidades. Quer ver a análise completa?",
+      content: "⚠️ **Parafuso M8** em nível crítico!\n\n![Produto](https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=200&h=150&fit=crop)\n\nSugiro pedido urgente de 200 unidades. Quer ver a análise completa?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -114,7 +114,23 @@ const FloatingChatButton = () => {
                           />
                         </div>
                       )}
-                      <p>{message.content}</p>
+                      <div className="prose prose-sm max-w-none">
+                        {message.content.split('\n').map((line, i) => {
+                          // Check if line contains markdown image
+                          const imgMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+                          if (imgMatch) {
+                            return (
+                              <img
+                                key={i}
+                                src={imgMatch[2]}
+                                alt={imgMatch[1]}
+                                className="rounded-lg my-1 max-w-full h-auto"
+                              />
+                            );
+                          }
+                          return line ? <p key={i} className="my-0">{line}</p> : <br key={i} />;
+                        })}
+                      </div>
                     </div>
                   </div>
                 ))}

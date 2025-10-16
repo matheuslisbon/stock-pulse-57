@@ -22,7 +22,7 @@ const Chatbot = () => {
     },
     {
       role: "assistant",
-      content: "📊 **Análise Rápida do Estoque:**\n\n• Parafuso M8 está em nível crítico (12 unidades)\n• Consumo médio: 45 unidades/semana\n• Tendência: +15% de aumento nas últimas 4 semanas\n\n🎯 **Recomendação Urgente:**\nSugiro reabastecer Parafuso M8 com pedido de 200 unidades. Com base no histórico, você ficará sem estoque em aproximadamente 2 dias se não agir agora!\n\n💡 Posso fazer a análise de algum produto específico ou deseja ver mais recomendações?",
+      content: "📊 **Análise Rápida do Estoque:**\n\n![Parafuso M8](https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400&h=300&fit=crop)\n\n**Parafuso M8** está em nível crítico!\n\n• Estoque atual: 12 unidades\n• Consumo médio: 45 unidades/semana\n• Tendência: +15% de aumento nas últimas 4 semanas\n\n🎯 **Recomendação Urgente:**\nSugiro reabastecer com pedido de 200 unidades. Com base no histórico, você ficará sem estoque em aproximadamente 2 dias se não agir agora!\n\n💡 Posso fazer a análise de algum produto específico ou deseja ver mais recomendações?",
       timestamp: new Date(),
     },
   ]);
@@ -129,7 +129,23 @@ const Chatbot = () => {
                             </span>
                           </div>
                         )}
-                        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                        <div className="text-sm whitespace-pre-wrap prose prose-sm max-w-none">
+                          {message.content.split('\n').map((line, i) => {
+                            // Check if line contains markdown image
+                            const imgMatch = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+                            if (imgMatch) {
+                              return (
+                                <img
+                                  key={i}
+                                  src={imgMatch[2]}
+                                  alt={imgMatch[1]}
+                                  className="rounded-lg my-2 max-w-full h-auto"
+                                />
+                              );
+                            }
+                            return line ? <p key={i}>{line}</p> : <br key={i} />;
+                          })}
+                        </div>
                         <span
                           className={`text-xs mt-2 block ${
                             message.role === "user"
