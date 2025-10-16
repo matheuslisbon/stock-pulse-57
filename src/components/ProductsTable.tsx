@@ -1,4 +1,5 @@
-import { AlertCircle, TrendingDown, TrendingUp, Clock } from "lucide-react";
+import { useState } from "react";
+import { AlertCircle, TrendingDown, TrendingUp, Clock, Search } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,6 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 
 interface Product {
@@ -88,6 +98,30 @@ const mockProducts: Product[] = [
 ];
 
 const ProductsTable = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Filtrar produtos baseado na pesquisa
+  const filteredProducts = mockProducts.filter(
+    (product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Calcular paginação
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  // Reset para primeira página quando pesquisa muda
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
   const getPriorityBadge = (priority: Product["priority"]) => {
     const variants = {
       critical: "bg-destructive text-destructive-foreground",
@@ -115,8 +149,21 @@ const ProductsTable = () => {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card">
-      <Table>
+    <div className="space-y-4">
+      {/* Campo de Pesquisa */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Pesquisar por nome, SKU ou categoria..."
+          value={searchTerm}
+          onChange={(e) => handleSearchChange(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
+      {/* Tabela de Produtos */}
+      <div className="rounded-lg border border-border bg-card">
+        <Table>
         <TableHeader>
           <TableRow className="bg-muted/50">
             <TableHead className="font-semibold">Produto</TableHead>
@@ -129,7 +176,14 @@ const ProductsTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockProducts.map((product) => (
+          {currentProducts.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                Nenhum produto encontrado
+              </TableCell>
+            </TableRow>
+          ) : (
+            currentProducts.map((product) => (
             <TableRow
               key={product.id}
               className={cn(
@@ -202,9 +256,57 @@ const ProductsTable = () => {
                 </Button>
               </TableCell>
             </TableRow>
-          ))}
+            ))
+          )}
         </TableBody>
       </Table>
+      </div>
+
+      {/* Paginação */}
+      {filteredProducts.length > 0 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Mostrando {startIndex + 1} a {Math.min(endIndex, filteredProducts.length)} de{" "}
+            {filteredProducts.length} produtos
+          </p>
+          
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  className={cn(
+                    "cursor-pointer",
+                    currentPage === 1 && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  className={cn(
+                    "cursor-pointer",
+                    currentPage === totalPages && "pointer-events-none opacity-50"
+                  )}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };
