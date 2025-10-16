@@ -1,8 +1,12 @@
 import { Package, BarChart3, AlertTriangle, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AddProductDialog } from "./AddProductDialog";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-brand-primary-dark bg-brand-primary shadow-md">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -19,25 +23,26 @@ const Header = () => {
 
         <nav className="hidden md:flex items-center gap-1">
           <Button
-            variant="default"
-            className="gap-2 bg-yellow-400 text-blue-500 hover:bg-yellow-500 hover:text-blue-500"
+            variant={location.pathname === "/" ? "default" : "ghost"}
+            className={location.pathname === "/" 
+              ? "gap-2 bg-brand-secondary text-brand-primary-dark hover:bg-brand-secondary-light" 
+              : "gap-2 text-white hover:bg-white/10 hover:text-white"
+            }
+            onClick={() => navigate("/")}
           >
             <BarChart3 className="h-4 w-4" />
             Dashboard
           </Button>
           <Button
-            variant="ghost"
-            className="gap-2 text-white hover:bg-white/10 hover:text-white"
+            variant={location.pathname === "/analytics" ? "default" : "ghost"}
+            className={location.pathname === "/analytics" 
+              ? "gap-2 bg-brand-secondary text-brand-primary-dark hover:bg-brand-secondary-light" 
+              : "gap-2 text-white hover:bg-white/10 hover:text-white"
+            }
+            onClick={() => navigate("/analytics")}
           >
             <Package className="h-4 w-4" />
-            Produtos
-          </Button>
-          <Button
-            variant="ghost"
-            className="gap-2 text-white hover:bg-white/10 hover:text-white"
-          >
-            <AlertTriangle className="h-4 w-4" />
-            Alertas
+            Analytics & IA
           </Button>
         </nav>
 
